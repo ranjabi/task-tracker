@@ -24,16 +24,20 @@ export default function History() {
   return (
     <div className="px-6 w-full mt-10">
       <div className="font-semibold text-2xl">History</div>
-      <div className='mt-4'>
+      <div className="mt-4">
         {data.map((task) => {
           const taskName = task.name;
-          const taskDate = formatDateToDayMonthYear(new Date(task.sessions[0].startTime));
+          const taskDate = formatDateToDayMonthYear(
+            new Date(task.sessions[0].startTime)
+          );
           return (
             <div key={task.id} className="mb-8">
-              <p>{taskName}</p>
-              <p>{taskDate}</p>
+              <div className="flex justify-between">
+                <p>{taskName}</p>
+                <p>{taskDate}</p>
+              </div>
               <table className="w-full mt-1">
-                <thead className=''>
+                <thead className="">
                   <tr className="border bg-blue-100">
                     <th className="py-2 text-center font-semibold">
                       Start Time
@@ -52,7 +56,9 @@ export default function History() {
                         <td className="py-2 text-center">
                           {formatDateToHHMMSS(new Date(session.endTime))}
                         </td>
-                        <td className="py-2 text-center">{session.duration} detik</td>
+                        <td className="py-2 text-center">
+                          {session.duration} detik
+                        </td>
                       </tr>
                     );
                   })}
@@ -84,7 +90,7 @@ function formatDateToHHMMSS(date: Date) {
 
 function formatDateToDayMonthYear(date: Date) {
   // Get the individual components (day, month, year) from the Date object
-  const day = date.getDate().toString().padStart(2, '0');;
+  const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if necessary
   const year = date.getFullYear();
 
