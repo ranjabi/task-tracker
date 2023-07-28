@@ -49,19 +49,20 @@ export default function Stopwatch() {
     return () => clearInterval(timer.current!);
   }, [isRunning]);
 
-  const { register, watch, formState: { errors } } = useForm();
+  const { register, resetField, watch, formState: { errors } } = useForm();
 
   return (
     <div className="border border-gray-200 py-6 rounded-lg mt-12 w-80 flex flex-col items-center space-y-4 px-4">
       <p className="text-5xl">Stopwatch</p>
       <p className="text-5xl pt-5">{formatTime(secondsElapsed)}</p>
-      <form className='w-full pt-4'>
+      <form className='w-full pt-4 flex '>
         <input
-          className="w-full border border-gray-300 rounded-lg px-2 py-1 mt-1"
+          className="w-full border border-gray-300 rounded-md px-2 py-1"
           type="text"
           placeholder="Task Name"
           {...register("taskName", { required: true })}
         />
+        <button type='button' className='btn-outline-primary rounded-lg text-xs px-3 ml-2' onClick={() => resetField('taskName')}>X</button>
         {errors.exampleRequired && <span>This field is required</span>}
         </form>
       <div className="pt-1">
