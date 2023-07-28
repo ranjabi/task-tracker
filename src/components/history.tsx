@@ -15,7 +15,6 @@ export default function History() {
       const res = await fetch('/api/stopwatch');
       const _data = await res.json();
       const data: TaskWithSession[] = _data.data;
-      // console.log('data', data[0].sessions[0]);
       setData(data);
     }
 
@@ -29,7 +28,6 @@ export default function History() {
         {data.map((task) => {
           const taskName = task.name;
           const taskDate = formatDateToDayMonthYear(new Date(task.sessions[0].startTime));
-          console.log('task', task);
           return (
             <div key={task.id} className="mb-8">
               <p>{taskName}</p>

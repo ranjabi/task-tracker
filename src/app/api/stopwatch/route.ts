@@ -28,20 +28,21 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const body: Timestamp[] = await req.json();
+  const body = await req.json();
+  const taskName = body.taskName as string
+  const timeStamp = body.timeStamp as Timestamp[]
 
   const prisma = new PrismaClient();
-  const taskId = Math.floor(Math.random() * 1000) + 1
   const newTask = await prisma.task.create({
     data: {
-      name: `Task ${taskId}`,
+      name: taskName,
       user: {
         connect: { username: 'Ranjabi' },
       },
     },
   });
 
-  body.forEach(async ({startTime, endTime, secondsElapsed}) => {
+  timeStamp.forEach(async ({startTime, endTime, secondsElapsed}) => {
     await prisma.session.create({
       data: {
         startTime: new Date(Number(startTime)),
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
       sessions: true
     },
     where: {
-      name: `Task ${taskId}`
+      name: taskName,
     }
   })
 
