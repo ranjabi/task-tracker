@@ -49,19 +49,19 @@ export default function Stopwatch() {
   }, [isRunning]);
 
   return (
-    <div className="border border-red-100 flex flex-col items-center space-y-4">
-      <div className="">stopwatch</div>
-      <p>{formatTime(secondsElapsed)}</p>
-      <div>
+    <div className="border border-gray-200 py-4 rounded-lg mt-12 w-80 flex flex-col items-center space-y-4">
+      <p className="text-5xl mt-6">Stopwatch</p>
+      <p className='text-5xl pt-5'>{formatTime(secondsElapsed)}</p>
+      <div className='pt-8'>
         <button
-          className="border border-gray-400 px-1 m-1"
+          className="btn-primary mr-4"
           onClick={() => setSecondsElapsed(0)}
         >
-          restart
+          RESTART
         </button>
         {secondsElapsed > 0 && (
           <button
-            className="border border-gray-400 px-1 m-1"
+            className="btn-primary"
             onClick={async () => {
               if (isRunning) {
                 clearInterval(timer.current!); // what this does?
@@ -99,12 +99,12 @@ export default function Stopwatch() {
               setSecondsElapsed(0);
             }}
           >
-            stop
+            STOP
           </button>
         )}
 
         <button
-          className="border border-gray-400 px-1 m-1"
+          className="btn-primary"
           onClick={() => {
             if (isRunning) {
               clearInterval(timer.current!);
@@ -132,7 +132,7 @@ export default function Stopwatch() {
             setIsRunning(!isRunning);
           }}
         >
-          {isRunning ? 'pause' : 'start'}
+          {isRunning ? 'PAUSE' : 'START'}
         </button>
       </div>
     </div>
