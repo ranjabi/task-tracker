@@ -1,40 +1,50 @@
+'use client';
+
+import { Task, Session } from '@prisma/client';
+import { useEffect, useState } from 'react';
+
+type TaskWithSession = Task & {
+  sessions: Session[];
+};
+
 export default function History() {
+  const [data, setData] = useState<TaskWithSession[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch('/api/stopwatch');
+      const _data = await res.json();
+      const data: TaskWithSession[] = _data.data;
+      // console.log('data', data[0].sessions[0]);
+      setData(data);
+    }
+
+    fetchData();
+  }, []);
+
   return (
-    <>
-      <div>History</div>
-      <table>
+    <div className="px-6 w-full mt-10">
+      <div className='font-semibold text-xl'>History</div>
+      <table className="w-full mt-3">
         <thead>
-          <tr>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Duration</th>
+          <tr className='bg-gray-100'>
+            <th className='py-2 text-center font-semibold'>Start Time</th>
+            <th className='py-2 text-center font-semibold'>End Time</th>
+            <th className='py-2 text-center font-semibold'>Duration</th>
           </tr>
         </thead>
         <tbody>
-          {dummyData.map((data) => (
-            <tr key={data.id}>
-              <td>{data.startTime}</td>
-              <td>{data.endTime}</td>
-              <td>{data.duration}</td>
-            </tr>
-          ))}
+          {data[0]?.sessions.map((session) => {
+            return (
+              <tr key={session.id} className="border-b ">
+                  <td className='py-2 text-center'>{new Date(session.startTime).toLocaleString()}</td>
+                  <td className='py-2 text-center'>{new Date(session.endTime).toLocaleString()}</td>
+                  <td className='py-2 text-center'>{session.duration}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
-
-const dummyData = [
-  {
-    id: 1,
-    startTime: '2021-01-01 00:00:00',
-    endTime: '2021-01-01 00:00:10',
-    duration: 20,
-  },
-  {
-    id: 2,
-    startTime: '2021-01-01 00:00:00',
-    endTime: '2021-01-01 00:00:10',
-    duration: 20,
-  },
-];
