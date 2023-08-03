@@ -42,25 +42,21 @@ export async function POST(req: Request) {
     },
   });
 
-  timeStamp.forEach(async ({startTime, endTime, secondsElapsed}) => {
-    await prisma.session.create({
-      data: {
-        startTime: new Date(Number(startTime)),
-        endTime: new Date(Number(endTime)),
-        duration: secondsElapsed,
-        task: {
-          connect: { id: newTask.id }
-        },
-      },
-    });
-  });
+  await prisma.session.createMany({
+    data: timeStamp.map(({startTime, endTime, secondsElapsed}) => ({
+      startTime: new Date(Number(startTime)),
+      endTime: new Date(Number(endTime)),
+      duration: secondsElapsed,
+      taskId: newTask.id
+    }))
+  })
 
   const task = await prisma.task.findFirst({
     include: {
       sessions: true
     },
     where: {
-      name: taskName,
+      id: newTask.id,
       sessions: {
         some: {}
       }
