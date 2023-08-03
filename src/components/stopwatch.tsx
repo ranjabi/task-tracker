@@ -10,6 +10,11 @@ type Timestamp = {
   secondsElapsed: number;
 };
 
+type StopwatchProps = {
+  data: TaskWithSession[];
+  setData: React.Dispatch<React.SetStateAction<TaskWithSession[]>>;
+}
+
 function parseTime(timestamp: number) {
   return new Date(timestamp).toLocaleString('en-GB', {
     day: '2-digit',
@@ -21,7 +26,7 @@ function parseTime(timestamp: number) {
   });
 }
 
-export default function Stopwatch() {
+export default function Stopwatch({ data, setData }: StopwatchProps) {
   const [secondsElapsed, setSecondsElapsed] = React.useState(0);
   const [timestamps, setTimestamps] = React.useState<Timestamp[]>([]);
   const [isRunning, setIsRunning] = React.useState(false);
@@ -109,7 +114,9 @@ export default function Stopwatch() {
                   },
                   body: JSON.stringify(body),
                 });
+                const data = await res.json();
                 setTimestamps([]);
+                setData((prevData) => [data.data, ...prevData]);
               }
 
               setIsRunning(false);

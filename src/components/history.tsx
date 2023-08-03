@@ -4,13 +4,15 @@ import { Task, Session } from '@prisma/client';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-type TaskWithSession = Task & {
-  sessions: Session[];
-};
+type HistoryProps = {
+  data: TaskWithSession[];
+  setData: React.Dispatch<React.SetStateAction<TaskWithSession[]>>;
+}
 
-export default function History() {
-  const [data, setData] = useState<TaskWithSession[]>([]);
-
+export default function History({
+  data,
+  setData,
+}: HistoryProps) {
   useEffect(() => {
     async function fetchData() {
       const res = await fetch('/api/stopwatch');
@@ -70,7 +72,7 @@ export default function History() {
                 </div>
                 <table className="w-full mt-1">
                   <thead className="">
-                    <tr className="border bg-blue-100">
+                    <tr className="border bg-blue-100 text-blue-600">
                       <th className="py-2 text-center font-semibold">
                         Start Time
                       </th>

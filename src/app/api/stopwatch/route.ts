@@ -61,6 +61,9 @@ export async function POST(req: Request) {
     },
     where: {
       name: taskName,
+      sessions: {
+        some: {}
+      }
     }
   })
 

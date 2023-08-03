@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-gray-100">
       <body className="max-w-lg bg-white min-h-screen  mx-auto">
-        <section className="bg-blue-700">
+        <section className="bg-blue-800">
           <nav className="h-[60px] flex items-center pl-4">
             <p className='text-xl text-white font-semibold'>TASK TRACKER</p>
           </nav>
