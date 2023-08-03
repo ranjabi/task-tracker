@@ -1,14 +1,8 @@
 'use client';
 
+import { formatTime } from '@/lib/time';
 import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-
-type Timestamp = {
-  id: number;
-  startTime: number;
-  endTime: number;
-  secondsElapsed: number;
-};
 
 type StopwatchProps = {
   data: TaskWithSession[];
@@ -57,7 +51,7 @@ export default function Stopwatch({ data, setData }: StopwatchProps) {
   const { register, resetField, watch, formState: { errors } } = useForm();
 
   return (
-    <div className="border border-gray-200 py-6 rounded-lg mt-12 w-80 flex flex-col items-center space-y-4 px-4">
+    <div className="border border-gray-200 py-6 rounded-lg w-96 flex flex-col items-center space-y-4 px-4">
       <p className="text-5xl">Stopwatch</p>
       <p className="text-5xl pt-5">{formatTime(secondsElapsed)}</p>
       <form className='w-full pt-4 flex '>
@@ -161,16 +155,4 @@ export default function Stopwatch({ data, setData }: StopwatchProps) {
       </div>
     </div>
   );
-}
-
-function formatTime(time: number) {
-  let hours: string | number = Math.floor(time / 3600);
-  let minutes: string | number = Math.floor((time / 60) % 60);
-  let seconds: string | number = Math.floor(time % 60);
-
-  hours = hours < 10 ? '0' + hours : hours;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  seconds = seconds < 10 ? '0' + seconds : seconds;
-
-  return `${hours}:${minutes}:${seconds}`;
 }
