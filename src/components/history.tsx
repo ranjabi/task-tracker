@@ -18,7 +18,7 @@ export default function History({
       const res = await fetch('/api/stopwatch');
       const _data = await res.json();
       const data: TaskWithSession[] = _data.data;
-      setData(data);
+      setData(data.reverse());
     }
 
     fetchData();
@@ -48,7 +48,7 @@ export default function History({
       <div className='flex justify-between items-center mt-4'>
         <button className='btn-solid-primary ' onClick={decrementDay}>{'<'}</button>
         <p className='text-xl'>{formatDateToDayMonthYear(date)}</p>
-        <button className={clsx('btn-solid-primary', isDisabledNextDay() ? 'bg-blue-100 hover:bg-blue-100' : '')} onClick={incrementDay} disabled={isDisabledNextDay() ? true : false}>{'>'}</button>
+        <button className={clsx('btn-solid-primary', isDisabledNextDay() ? 'bg-opacity-30 hover:bg-opacity-30' : '')} onClick={incrementDay} disabled={isDisabledNextDay() ? true : false}>{'>'}</button>
       </div>
       <div className="">
         {data.map((task) => {
