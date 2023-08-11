@@ -30,7 +30,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const body = await req.json();
   const taskName = body.taskName as string
-  const timeStamp = body.timeStamp as Timestamp[]
+  const timestamps = body.timestamps as Timestamp[]
 
   const prisma = new PrismaClient();
   const newTask = await prisma.task.create({
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
   });
 
   await prisma.session.createMany({
-    data: timeStamp.map(({startTime, endTime, secondsElapsed}) => ({
+    data: timestamps.map(({startTime, endTime, secondsElapsed}) => ({
       startTime: new Date(Number(startTime)),
       endTime: new Date(Number(endTime)),
       duration: secondsElapsed,
