@@ -12,8 +12,19 @@ export default function Timer({ data, setData }: TimerProps) {
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [timestamps, setTimestamps] = useState<Timestamp[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [secondsPaused, setSecondsPaused] = useState(0);
 
   const timer = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!isRunning && secondsLeft !== 0) {
+      setSecondsPaused(0);
+      timer.current = setInterval(() => {
+        setSecondsPaused((seconds) => seconds + 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer.current!);
+  }, [isRunning, secondsLeft]);
 
   useEffect(() => {
     if (isRunning) {
@@ -28,7 +39,7 @@ export default function Timer({ data, setData }: TimerProps) {
     if (isRunning && secondsLeft === 0) {
       handleStop();
     }
-  });
+  }, [isRunning, secondsLeft]);
 
   const {
     register,
@@ -42,18 +53,24 @@ export default function Timer({ data, setData }: TimerProps) {
     setTimerSeconds(minute * 60);
   }
 
-  function handleStartOrPause() {
-    if (isRunning) {
-      clearInterval(timer.current!);
-
-      let secondsDifference = timerSeconds - secondsLeft;
-
-      if (timestamps.length > 0) {
-        // if there was a pause, substract with previous timestamp to get the difference
-        secondsDifference =
-          timerSeconds - timestamps[timestamps.length - 1].secondsElapsed;
-      }
-
+  function handleAddingTime() {
+    if (timestamps.length > 0) {
+      // if there was a pause, substract with previous timestamp to get the difference
+      const startTime =
+        timestamps[timestamps.length - 1].endTime + secondsPaused * 1000;
+      const endTime = Date.now();
+      const secondsElapsed = (endTime - startTime) / 1000;
+      setTimestamps((timestamps) => [
+        ...timestamps,
+        {
+          id: timestamps.length + 1,
+          startTime,
+          endTime,
+          secondsElapsed,
+        },
+      ]);
+    } else {
+      const secondsDifference = timerSeconds - secondsLeft;
       setTimestamps((timestamps) => [
         ...timestamps,
         {
@@ -64,6 +81,14 @@ export default function Timer({ data, setData }: TimerProps) {
         },
       ]);
     }
+  }
+
+  function handleStartOrPause() {
+    if (isRunning) {
+      clearInterval(timer.current!);
+
+      handleAddingTime();
+    }
 
     setIsRunning(!isRunning);
   }
@@ -71,26 +96,10 @@ export default function Timer({ data, setData }: TimerProps) {
   async function handleStop() {
     clearInterval(timer.current!);
 
-    let secondsDifference = timerSeconds - secondsLeft;
-
-    if (timestamps.length > 0) {
-      // if there was a pause, substract with previous timestamp to get the difference
-      secondsDifference =
-        timerSeconds - timestamps[timestamps.length - 1].secondsElapsed;
-    }
-
-    const timeStamp = [
-      ...timestamps,
-      {
-        id: timestamps.length + 1,
-        startTime: Date.now() - secondsDifference * 1000,
-        endTime: Date.now(),
-        secondsElapsed: secondsDifference,
-      },
-    ];
+    handleAddingTime();
 
     const taskName = watch('taskName');
-    const body = { taskName, timeStamp };
+    const body = { taskName, timestamps };
 
     const res = await fetch('/api/stopwatch', {
       method: 'POST',
@@ -124,9 +133,24 @@ export default function Timer({ data, setData }: TimerProps) {
         >
           50 menit
         </button>
-        <button className="btn-outline-primary px-2 py-0.5" onClick={() => setTimer(30)}>30 menit</button>
-        <button className="btn-outline-primary px-2 py-0.5" onClick={() => setTimer(20)}>20 menit</button>
-        <button className="btn-outline-primary px-2 py-0.5" onClick={() => setTimer(10)}>10 menit</button>
+        <button
+          className="btn-outline-primary px-2 py-0.5"
+          onClick={() => setTimer(30)}
+        >
+          30 menit
+        </button>
+        <button
+          className="btn-outline-primary px-2 py-0.5"
+          onClick={() => setTimer(20)}
+        >
+          20 menit
+        </button>
+        <button
+          className="btn-outline-primary px-2 py-0.5"
+          onClick={() => setTimer(10)}
+        >
+          10 menit
+        </button>
       </div>
       <form className="w-full pt-4 flex ">
         <input
