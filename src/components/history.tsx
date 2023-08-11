@@ -91,7 +91,7 @@ export default function History({
                             {formatDateToHHMMSS(new Date(session.endTime))}
                           </td>
                           <td className="py-2 text-center">
-                            {session.duration} detik
+                            {session.duration/60} menit
                           </td>
                         </tr>
                       );
