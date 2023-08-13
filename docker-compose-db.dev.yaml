@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_DB=task-tracker-dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./data/db-dev:/var/lib/postgresql/data
