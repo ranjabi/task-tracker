@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     },
     where: {
       user: {
-        username: 'Ranjabi'
+        username: 'ranjabi'
       },
       sessions: {
         some: {}
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     data: {
       name: taskName,
       user: {
-        connect: { username: 'Ranjabi' },
+        connect: { username: 'ranjabi' },
       },
     },
   });
