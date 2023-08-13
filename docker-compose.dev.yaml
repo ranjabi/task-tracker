@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  next:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://postgres:secret@db:5432/task-tracker-dev?schema=public
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_DB=task-tracker-dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./data/db-dev:/var/lib/postgresql/data
