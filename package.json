@@ -4,17 +4,23 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-with-db": "yarn run docker-compose-db:dev && yarn prisma generate && yarn run migrate:dev && yarn dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "cypress": "cypress open",
     "docker-compose:prod": "docker-compose -f docker-compose.yaml up",
+    "docker-compose-db:dev": "docker compose -f docker-compose-db.dev.yaml up --detach",
+    "docker-compose:dev": "docker compose -f docker-compose.dev.yaml up",
+    "docker-compose-build:dev": "docker compose -f docker-compose.dev.yaml up --build",
     "docker-compose-build:prod": "docker-compose -f docker-compose.yaml up --build",
     "docker-compose-down:prod": "docker-compose -f docker-compose.yaml down",
-    "docker-compose:dev": "docker-compose -f docker-compose.dev.yaml up",
     "migrate:prod": "dotenv -e .env.production -- yarn prisma migrate deploy",
     "migrate:dev": "dotenv -e .env.development -- yarn prisma migrate dev",
     "start:migrate:prod": "yarn prisma migrate deploy && node server.js"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.16.2",
