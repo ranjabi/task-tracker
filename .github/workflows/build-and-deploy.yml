@@ -25,6 +25,23 @@ jobs:
     steps:
       - name: Checkout the repo 
         uses: actions/checkout@v2
+
+      - name: Create ENV file
+        run: |
+          rm -f .env
+          touch .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo IMAGE=$(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) >> .env
+
+      - name: Copy docker compose and ENV to vm
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: 22
+          key: ${{ secrets.SSHKEY }}
+          source: "docker-compose.yaml,.env"
+          target: /root/task-tracker
         
       - name: Build container image
         run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
@@ -63,6 +80,4 @@ jobs:
             # Remove old container
             docker rm $(echo $IMAGE_NAME)
             # Run a new container from a new image
-            DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            IMAGE=$(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) \
-            docker compose -f docker-compose.yaml up --detach
+            docker compose -f task-tracker/docker-compose.yaml up --detach
