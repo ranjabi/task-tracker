@@ -9,6 +9,7 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 COPY prisma ./prisma/
+COPY docker-compose.yaml ./
 RUN \
   if [ -f yarn.lock ]; then yarn --production --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -22,6 +23,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
+COPY --from=deps /app/docker-compose.yaml ./
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -55,6 +57,7 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/docker-compose.yaml ./
 
 EXPOSE 3000
 
