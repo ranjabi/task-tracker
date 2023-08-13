@@ -30,6 +30,7 @@ For the deployment, we utilize CI/CD for automated pipeline using github action.
 
 To Do:
 - [ ] Use docker compose in github action for deployment
+- [ ] Handle prisma generate and migrate in production
 
 Notes:
 - `yarn run-with-db` will use these commands below:
