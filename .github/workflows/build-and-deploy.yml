@@ -16,7 +16,7 @@ on:
 #2
 env:
   REGISTRY: "registry.digitalocean.com/ranjabi-registry"
-  IMAGE_NAME: "tasktracker-docker"
+  IMAGE_NAME: "task-tracker-docker"
 
 #3
 jobs:
