@@ -8,12 +8,12 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
     depends_on:
-      - postgres
+      - db
   db:
     image: postgres
     restart: always
     ports:
-      - '5432:5432'
+      - '5433:5432'
     environment:
       - POSTGRES_DB=task-tracker-prod
       - POSTGRES_USER=postgres
