@@ -8,6 +8,8 @@ services:
     ports:
       - 80:80
     container_name: reverse-proxy
+    networks:
+      - nginx_network
     depends_on:
       - next
   next:
@@ -29,3 +31,7 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
       - ./data/db-prod:/var/lib/postgresql/data
+
+networks:
+  nginx_network:
+    driver: bridge
