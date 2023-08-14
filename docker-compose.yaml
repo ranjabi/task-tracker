@@ -24,3 +24,7 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
       - ./data/postgres-prod:/var/lib/postgresql/data
+
+networks:
+  nginx_ranjabi_network:
+    external: true
