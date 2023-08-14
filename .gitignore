@@ -36,10 +36,8 @@ next-env.d.ts
 
 .env
 
-# docker db
-data/db
-data/db-dev
-data/db-prod
+# docker volumes
+data
 
 cypress/e2e/1-getting-started
 cypress/e2e/2-advanced-examples
