@@ -64,4 +64,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME localhost
 
-CMD ["yarn", "run", "start:migrate:prod"]
+CMD ["yarn", "run", "start:prod"]
