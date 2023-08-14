@@ -16,7 +16,7 @@ on:
 #2
 env:
   REGISTRY: "registry.digitalocean.com/ranjabi-registry"
-  IMAGE_NAME: "task-tracker-docker"
+  IMAGE_NAME: "task-tracker"
 
 #3
 jobs:
@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: 22
           key: ${{ secrets.SSHKEY }}
-          source: "docker-compose.yaml,.env"
+          source: "docker-compose.yaml,.env,nginx.conf"
           target: /root/task-tracker
         
       - name: Build container image

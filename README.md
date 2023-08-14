@@ -40,3 +40,9 @@ Notes:
   "docker-compose-db:dev": "docker compose -f docker-compose-db.dev.yaml up --detach"
   "migrate:dev": "dotenv -e .env.development -- yarn prisma migrate dev"
   ```
+
+```
+act --secret-file act.secrets
+```
+
+fill act.secrets with value from github action secret
